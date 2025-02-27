@@ -1,10 +1,14 @@
-/* Styles pour le tableau */
+body{
+    background-color: #ddd;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
 }
 
 table th, table td {
+    font-family: 'Montserrat';
     padding: 12px;
     text-align: center;
     border: 1px solid #ddd;

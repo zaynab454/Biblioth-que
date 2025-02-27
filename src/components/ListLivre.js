@@ -4,29 +4,33 @@ import { EmpruntContext } from '../context/EmpruntContext';
 
 const ListLivre = () => {
     const [livres, setLivres] = useState([]);
-    const { EmpruntLivre } = useContext(EmpruntContext);
+    const { EmpruntLivre, emprunts } = useContext(EmpruntContext);
     const [empruntStatus, setEmpruntStatus] = useState({});
 
     useEffect(() => {
         fetchLivres().then(setLivres);
     }, []);
 
-    // Fonction pour gérer le clic sur le bouton "Emprunter"
-    const handleEmpruntClick = (id) => {
-        // Marquer le livre comme emprunté dans l'état local
+    useEffect(() => {
+        const status = {};
+        Object.keys(emprunts).forEach((id) => {
+            status[id] = emprunts[id] ? true : false; 
+        });
+        setEmpruntStatus(status);
+    }, [emprunts]);
+
+    const handleEmpruntClick = (id, titre, auteur) => {
         setEmpruntStatus((prevStatus) => ({
             ...prevStatus,
-            [id]: true,
+            [id]: true, 
         }));
-
-        // Appeler la fonction EmpruntLivre de context pour effectuer l'emprunt
-        EmpruntLivre(id);
+        EmpruntLivre(id, titre, auteur); 
     };
 
     return (
         <div className="mb-4">
             <h2 className="text-center mb-3">Livres disponibles</h2>
-            <table className="table table-secondary">
+            <table className="table table-striped">
                 <thead>
                     <tr>
                         <th>Titre</th>
@@ -44,8 +48,11 @@ const ListLivre = () => {
                             <td>
                                 {livre.disponible && (
                                     <button
-                                        className={`btn ${empruntStatus[livre.id] ? 'btn-warning' : 'btn-outline-success'}`}
-                                        onClick={() => handleEmpruntClick(livre.id)}
+                                        className={`btn ${
+                                            empruntStatus[livre.id] ? 'btn-warning' : 'btn-outline-success'
+                                        }`}
+                                        onClick={() => handleEmpruntClick(livre.id, livre.titre, livre.auteur)}
+                                        disabled={empruntStatus[livre.id]} // Désactiver le bouton si déjà emprunté
                                     >
                                         {empruntStatus[livre.id] ? 'Emprunté' : 'Emprunter'}
                                     </button>

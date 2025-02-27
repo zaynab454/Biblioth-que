@@ -7,7 +7,7 @@ const LivresEmpruntes = () => {
     return (
         <div className="mb-4">
             <h2 className="text-center mb-3">Livres empruntés</h2>
-            <table className="table table-secondary">
+            <table className="table table-danger">
                 <thead>
                     <tr>
                         <th>Titre</th>
@@ -16,26 +16,20 @@ const LivresEmpruntes = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {Object.keys(emprunts).map((id) => {
-                        if (emprunts[id]) {
-                            const livre = { id, titre: `Livre ${id}`, auteur: `Auteur ${id}` }; // Simuler les livres empruntés
-                            return (
-                                <tr key={id}>
-                                    <td>{livre.titre}</td>
-                                    <td>{livre.auteur}</td>
-                                    <td>
-                                        <button
-                                            className="btn btn-outline-danger"
-                                            onClick={() => returnLivre(id)}
-                                        >
-                                            Rendre
-                                        </button>
-                                    </td>
-                                </tr>
-                            );
-                        }
-                        return null;
-                    })}
+                    {Object.keys(emprunts).map((id) => (
+                        <tr key={id}>
+                            <td>{emprunts[id].titre}</td>
+                            <td>{emprunts[id].auteur}</td>
+                            <td>
+                                <button
+                                    className="btn btn-outline-danger"
+                                    onClick={() => returnLivre(id)}
+                                >
+                                    Rendre
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
                 </tbody>
             </table>
         </div>

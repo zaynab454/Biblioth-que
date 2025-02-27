@@ -1,16 +1,28 @@
 import React, { createContext, useState } from 'react';
 
+// Création du contexte
 export const EmpruntContext = createContext();
 
+// Fournisseur du contexte
 export const EmpruntProvider = ({ children }) => {
-    const [emprunts, setEmprunts] = useState([]);
+    // L'état des emprunts : un objet où chaque clé est l'ID d'un livre, et la valeur est un objet avec ses détails
+    const [emprunts, setEmprunts] = useState({});
 
-    const EmpruntLivre = (id) => {
-        setEmprunts((prev) => [...prev, { id, titre: `Livre ${id}`, auteur: `Auteur ${id}` }]);
+    // Fonction pour emprunter un livre
+    const EmpruntLivre = (id, titre, auteur) => {
+        setEmprunts((prev) => ({
+            ...prev,
+            [id]: { id, titre, auteur }, // Ajout du livre dans l'état
+        }));
     };
 
+    // Fonction pour retourner un livre
     const returnLivre = (id) => {
-        setEmprunts((prev) => prev.filter((livre) => livre.id !== id));
+        setEmprunts((prev) => {
+            const updatedEmprunts = { ...prev };
+            delete updatedEmprunts[id]; // Suppression du livre retourné
+            return updatedEmprunts;
+        });
     };
 
     return (
